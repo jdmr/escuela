@@ -23,13 +23,19 @@
  */
 package mx.edu.um.escuela;
 
+import java.util.Date;
+
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
 public class Alumno {
+    private String matricula;
     private String nombre;
     private String apellido;
+    private Date fechaNacimiento;
+    private Boolean esHombre = true;
+    private String correo;
 
     public Alumno() {
     }
@@ -37,6 +43,29 @@ public class Alumno {
     public Alumno(String nombre, String apellido) {
         this.nombre = nombre;
         this.apellido = apellido;
+    }
+
+    public Alumno(String matricula, String nombre, String apellido, Date fechaNacimiento, Boolean esHombre, String correo) {
+        this.matricula = matricula;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.esHombre = esHombre;
+        this.correo = correo;
+    }
+
+    /**
+     * @return the matricula
+     */
+    public String getMatricula() {
+        return matricula;
+    }
+
+    /**
+     * @param matricula the matricula to set
+     */
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
     }
 
     /**
@@ -67,9 +96,51 @@ public class Alumno {
         this.apellido = apellido;
     }
 
+    /**
+     * @return the fechaNacimiento
+     */
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    /**
+     * @param fechaNacimiento the fechaNacimiento to set
+     */
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    /**
+     * @return the esHombre
+     */
+    public Boolean getEsHombre() {
+        return esHombre;
+    }
+
+    /**
+     * @param esHombre the esHombre to set
+     */
+    public void setEsHombre(Boolean esHombre) {
+        this.esHombre = esHombre;
+    }
+
+    /**
+     * @return the correo
+     */
+    public String getCorreo() {
+        return correo;
+    }
+
+    /**
+     * @param correo the correo to set
+     */
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
     @Override
     public String toString() {
-        return "Alumno{" + "nombre=" + nombre + ", apellido=" + apellido + '}';
+        return "Alumno{" + "matricula=" + matricula + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + ", esHombre=" + esHombre + ", correo=" + correo + '}';
     }
     
 }

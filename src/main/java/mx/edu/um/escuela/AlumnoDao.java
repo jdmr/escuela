@@ -33,12 +33,55 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class AlumnoDao {
-    
+
+    private List<Alumno> alumnos = new ArrayList<>();
+
+    public AlumnoDao() {
+        alumnos.add(new Alumno("David", "Mendoza"));
+        alumnos.add(new Alumno("Dulce", "Alvarado"));
+    }
+
     public List<Alumno> lista() {
-        List<Alumno> alumnos = new ArrayList<>();
-        alumnos.add(new Alumno("David","Mendoza"));
-        alumnos.add(new Alumno("Dulce","Alvarado"));
-        
         return alumnos;
+    }
+
+    public Alumno crea(Alumno alumno) {
+        alumnos.add(alumno);
+        return alumno;
+    }
+
+    public Alumno actualiza(Alumno alumno) {
+        for (int pos = 0; pos < alumnos.size(); pos++) {
+            Alumno a = alumnos.get(pos);
+            if (a.getMatricula().equals(alumno.getMatricula())) {
+                alumnos.set(pos, alumno);
+                break;
+            }
+        }
+        return alumno;
+    }
+
+    public String elimina(Alumno alumno) {
+        String matricula = alumno.getMatricula();
+        for (int pos = 0; pos < alumnos.size(); pos++) {
+            Alumno a = alumnos.get(pos);
+            if (a.getMatricula().equals(alumno.getMatricula())) {
+                alumnos.remove(pos);
+                break;
+            }
+        }
+        return matricula;
+    }
+    
+    public Alumno obtiene(String matricula) {
+        Alumno alumno = null;
+        for (int pos = 0; pos < alumnos.size(); pos++) {
+            Alumno a = alumnos.get(pos);
+            if (a.getMatricula().equals(alumno.getMatricula())) {
+                alumno = a;
+                break;
+            }
+        }
+        return alumno;
     }
 }
