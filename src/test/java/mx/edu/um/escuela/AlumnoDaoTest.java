@@ -27,12 +27,21 @@ import java.util.Date;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:escuela.xml"})
 public class AlumnoDaoTest {
+    
+    @Autowired
+    private AlumnoDao instance;
 
     public AlumnoDaoTest() {
     }
@@ -59,11 +68,9 @@ public class AlumnoDaoTest {
     @Test
     public void testLista() {
         System.out.println("lista");
-        AlumnoDao instance = new AlumnoDao();
         List<Alumno> result = instance.lista();
         assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("David", result.get(0).getNombre());
+        assertTrue(instance.lista().size() >= 1);
     }
 
     /**
@@ -74,11 +81,10 @@ public class AlumnoDaoTest {
         System.out.println("crea");
         Alumno alumno = new Alumno("0003", "Daniel", "Mendoza", new Date(), true, "dama@um.edu.mx");
 
-        AlumnoDao instance = new AlumnoDao();
         Alumno result = instance.crea(alumno);
         assertNotNull(result);
-        assertEquals(3, instance.lista().size());
-        assertEquals("Daniel", instance.lista().get(2).getNombre());
+        assertTrue(instance.lista().size() > 1);
+        assertEquals("Daniel", instance.lista().get(instance.lista().size() - 1).getNombre());
     }
 
     /**
@@ -87,7 +93,6 @@ public class AlumnoDaoTest {
     @Test
     public void testActualiza() {
         System.out.println("actualiza");
-        AlumnoDao instance = new AlumnoDao();
         Alumno alumno = instance.lista().get(0);
         alumno.setNombre("Jorge David");
 
@@ -103,12 +108,12 @@ public class AlumnoDaoTest {
     @Test
     public void testElimina() {
         System.out.println("elimina");
-        AlumnoDao instance = new AlumnoDao();
         Alumno alumno = instance.lista().get(0);
+        Integer size = instance.lista().size();
 
         String result = instance.elimina(alumno);
         assertEquals("0001", result);
-        assertEquals(1, instance.lista().size());
+        assertEquals(size - 1, instance.lista().size());
     }
 
     /**
@@ -117,9 +122,8 @@ public class AlumnoDaoTest {
     @Test
     public void testObtiene() {
         System.out.println("obtiene");
-        String matricula = "0001";
-        AlumnoDao instance = new AlumnoDao();
+        String matricula = "0002";
         Alumno result = instance.obtiene(matricula);
-        assertEquals("David", result.getNombre());
+        assertEquals("Dulce", result.getNombre());
     }
 }
