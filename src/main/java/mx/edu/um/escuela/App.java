@@ -1,6 +1,8 @@
 package mx.edu.um.escuela;
 
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -9,16 +11,18 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  */
 public class App {
+    
+    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("escuela.xml");
         AlumnoDao alumnoDao = (AlumnoDao) context.getBean("alumnoDao");
         
-        System.out.println("Menu:");
-        System.out.println("1. Lista de Alumnos");
-        System.out.println("2. Crea alumno");
-        System.out.println("3. Obtiene alumno");
-        System.out.println("X. Salir");
+        log.info("Menu:");
+        log.info("1. Lista de Alumnos");
+        log.info("2. Crea alumno");
+        log.info("3. Obtiene alumno");
+        log.info("X. Salir");
         Scanner scanner = new Scanner(System.in);
         while(scanner.hasNext()) {
             Alumno alumno;
@@ -26,38 +30,38 @@ public class App {
             switch(line) {
                 case "1" : 
                     for(Alumno a : alumnoDao.lista()) {
-                        System.out.println(a);
+                        log.info("{}",a);
                     }
                     break;
                 case "2" :
                     alumno = new Alumno();
-                    System.out.println("Matricula:");
+                    log.info("Matricula:");
                     alumno.setMatricula(scanner.nextLine());
-                    System.out.println("Nombre:");
+                    log.info("Nombre:");
                     alumno.setNombre(scanner.nextLine());
-                    System.out.println("Apellido:");
+                    log.info("Apellido:");
                     alumno.setApellido(scanner.nextLine());
                     alumnoDao.crea(alumno);
-                    System.out.println("Alumno CREADO!!!");
+                    log.info("Alumno CREADO!!!");
                     break;
                 case "3":
-                    System.out.println("Matricula:");
+                    log.info("Matricula:");
                     alumno = alumnoDao.obtiene(scanner.nextLine());
-                    System.out.println(alumno);
+                    log.info("{}", alumno);
                     break;
                 case "X":
-                    System.out.println("Adios...");
+                    log.info("Adios...");
                     System.exit(0);
             }
-            System.out.println("Menu:");
-            System.out.println("1. Lista de Alumnos");
-            System.out.println("2. Crea alumno");
-            System.out.println("3. Obtiene alumno");
-            System.out.println("X. Salir");
+            log.info("Menu:");
+            log.info("1. Lista de Alumnos");
+            log.info("2. Crea alumno");
+            log.info("3. Obtiene alumno");
+            log.info("X. Salir");
         }
         
         App app = new App();
-        System.out.println(app.mensaje());
+        log.info(app.mensaje());
     }
 
     public String mensaje() {
