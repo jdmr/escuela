@@ -24,6 +24,7 @@
 package mx.edu.um.escuela;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
@@ -37,8 +38,8 @@ public class AlumnoDao {
     private List<Alumno> alumnos = new ArrayList<>();
 
     public AlumnoDao() {
-        alumnos.add(new Alumno("David", "Mendoza"));
-        alumnos.add(new Alumno("Dulce", "Alvarado"));
+        alumnos.add(new Alumno("0001", "David", "Mendoza", new Date(), true, "david.mendoza@um.edu.mx"));
+        alumnos.add(new Alumno("0002", "Dulce", "Alvarado", new Date(), true, "dulce.alvarado@um.edu.mx"));
     }
 
     public List<Alumno> lista() {
@@ -77,7 +78,7 @@ public class AlumnoDao {
         Alumno alumno = null;
         for (int pos = 0; pos < alumnos.size(); pos++) {
             Alumno a = alumnos.get(pos);
-            if (a.getMatricula().equals(alumno.getMatricula())) {
+            if (a.getMatricula().equals(matricula)) {
                 alumno = a;
                 break;
             }
