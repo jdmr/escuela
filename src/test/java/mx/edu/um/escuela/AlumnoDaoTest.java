@@ -28,6 +28,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -39,6 +41,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:escuela.xml"})
 public class AlumnoDaoTest {
+    
+    private static final Logger log = LoggerFactory.getLogger(AlumnoDaoTest.class);
     
     @Autowired
     private AlumnoDao instance;
@@ -67,7 +71,7 @@ public class AlumnoDaoTest {
      */
     @Test
     public void testLista() {
-        System.out.println("lista");
+        log.debug("lista");
         List<Alumno> result = instance.lista();
         assertNotNull(result);
         assertTrue(instance.lista().size() >= 1);
@@ -78,7 +82,7 @@ public class AlumnoDaoTest {
      */
     @Test
     public void testCrea() {
-        System.out.println("crea");
+        log.debug("crea");
         Alumno alumno = new Alumno("0003", "Daniel", "Mendoza", new Date(), true, "dama@um.edu.mx");
 
         Alumno result = instance.crea(alumno);
@@ -92,7 +96,7 @@ public class AlumnoDaoTest {
      */
     @Test
     public void testActualiza() {
-        System.out.println("actualiza");
+        log.debug("actualiza");
         Alumno alumno = instance.lista().get(0);
         alumno.setNombre("Jorge David");
 
@@ -107,7 +111,7 @@ public class AlumnoDaoTest {
      */
     @Test
     public void testElimina() {
-        System.out.println("elimina");
+        log.debug("elimina");
         Alumno alumno = instance.lista().get(0);
         Integer size = instance.lista().size();
 
@@ -121,7 +125,7 @@ public class AlumnoDaoTest {
      */
     @Test
     public void testObtiene() {
-        System.out.println("obtiene");
+        log.debug("obtiene");
         String matricula = "0002";
         Alumno result = instance.obtiene(matricula);
         assertEquals("Dulce", result.getNombre());

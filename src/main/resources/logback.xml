@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yy/MM/dd HH:mm:ss.SSS} [ESCUELA] %-5level [%thread] %logger{36}[%line] - %msg%n</pattern>
+    </encoder>
+  </appender>
+  <appender name="R" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>escuela.log</File>
+    <encoder>
+      <pattern>%d{yy/MM/dd HH:mm:ss.SSS} [ESCUELA] %-5level [%thread] %logger{36}[%line] - %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <maxIndex>10</maxIndex>
+      <FileNamePattern>escuela.log.%i</FileNamePattern>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>1MB</MaxFileSize>
+    </triggeringPolicy>
+  </appender>
+  <logger name="mx.edu.um.escuela" level="DEBUG"/>
+  <logger name="org.spingframework" level="DEBUG"/>
+  <root level="INFO">
+    <appender-ref ref="stdout"/>
+    <appender-ref ref="R"/>
+  </root>
+</configuration>

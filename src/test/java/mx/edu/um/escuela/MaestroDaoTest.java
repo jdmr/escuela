@@ -28,6 +28,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -39,7 +41,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:escuela.xml"})
 public class MaestroDaoTest {
-    
+
+    private static final Logger log = LoggerFactory.getLogger(MaestroDaoTest.class);
     @Autowired
     private MaestroDao instance;
 
@@ -67,7 +70,7 @@ public class MaestroDaoTest {
      */
     @Test
     public void testLista() {
-        System.out.println("lista");
+        log.debug("lista");
         List<Maestro> result = instance.lista();
         assertNotNull(result);
         assertTrue(instance.lista().size() >= 1);
@@ -78,7 +81,7 @@ public class MaestroDaoTest {
      */
     @Test
     public void testCrea() {
-        System.out.println("crea");
+        log.debug("crea");
         Maestro maestro = new Maestro("0003", "Daniel", "Mendoza", new Date(), true, "dama@um.edu.mx");
 
         Maestro result = instance.crea(maestro);
@@ -92,7 +95,7 @@ public class MaestroDaoTest {
      */
     @Test
     public void testActualiza() {
-        System.out.println("actualiza");
+        log.debug("actualiza");
         Maestro maestro = instance.lista().get(0);
         maestro.setNombre("Jorge David");
 
@@ -107,7 +110,7 @@ public class MaestroDaoTest {
      */
     @Test
     public void testElimina() {
-        System.out.println("elimina");
+        log.debug("elimina");
         Maestro maestro = instance.lista().get(0);
         Integer size = instance.lista().size();
 
@@ -121,7 +124,7 @@ public class MaestroDaoTest {
      */
     @Test
     public void testObtiene() {
-        System.out.println("obtiene");
+        log.debug("obtiene");
         String nomina = "0002";
         Maestro result = instance.obtiene(nomina);
         assertEquals("Dulce", result.getNombre());
