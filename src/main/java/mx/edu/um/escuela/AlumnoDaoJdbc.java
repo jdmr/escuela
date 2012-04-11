@@ -23,10 +23,7 @@
  */
 package mx.edu.um.escuela;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -60,8 +58,8 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
             + ")";
     private static final String ELIMINA_TABLA = "DROP TABLE IF EXISTS ALUMNOS";
     private static final String CREAR_ALUMNO = "INSERT INTO ALUMNOS(MATRICULA, NOMBRE, APELLIDO, FECHA_NACIMIENTO, ES_HOMBRE, CORREO) VALUES(?,?,?,?,?,?)";
-    private static final String ACTUALIZAR_ALUMNO = "UPDATE ALUMNOS SET NOMBRE = ?, APELLIDO = ?, FECHA_NACIMIENTO = ?, ES_HOMBRE = ?, CORREO = ? WHERE ID = ?";
-    private static final String OBTIENE_ALUMNO = "SELECT ID, MATRICULA, NOMBRE, APELLIDO, FECHA_NACIMIENTO, ES_HOMBRE, CORREO FROM ALUMNOS WHERE ID = ?";
+    private static final String ACTUALIZAR_ALUMNO = "UPDATE alumnos SET nombre = ?, apellido = ?, fecha_nacimiento = ?, es_hombre = ?, correo = ? WHERE matricula = ?";
+    private static final String OBTIENE_ALUMNO = "SELECT id, matricula, nombre, apellido, fecha_nacimiento, es_hombre, correo FROM alumnos WHERE matricula = ?";
     private List<Alumno> alumnos = new ArrayList<>();
 
     @Autowired
@@ -122,6 +120,8 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     @Override
     public Alumno actualiza(Alumno alumno) {
         log.debug("Actualizando al alumno {}", alumno);
+        getJdbcTemplate().update(ACTUALIZAR_ALUMNO, alumno.getNombre(), alumno.getApellido(), alumno.getFechaNacimiento(), alumno.getEsHombre(), alumno.getCorreo(), alumno.getMatricula());
+        
         for (int pos = 0; pos < alumnos.size(); pos++) {
             Alumno a = alumnos.get(pos);
             if (a.getMatricula().equals(alumno.getMatricula())) {
@@ -149,14 +149,30 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     @Override
     public Alumno obtiene(String matricula) {
         log.debug("Obteniendo al alumno con la matricula {}", matricula);
-        Alumno alumno = null;
-        for (int pos = 0; pos < alumnos.size(); pos++) {
-            Alumno a = alumnos.get(pos);
-            if (a.getMatricula().equals(matricula)) {
-                alumno = a;
-                break;
+        RowMapper<Alumno> mapper = new RowMapper<Alumno>() {
+
+            @Override
+            public Alumno mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Alumno alumno = new Alumno();
+                alumno.setId(rs.getLong("id"));
+                alumno.setMatricula(rs.getString("matricula"));
+                alumno.setNombre(rs.getString("nombre"));
+                alumno.setApellido(rs.getString("apellido"));
+                alumno.setFechaNacimiento(new Date(rs.getDate("fecha_nacimiento").getTime()));
+                alumno.setEsHombre(rs.getBoolean("es_hombre"));
+                alumno.setCorreo(rs.getString("correo"));
+                return alumno;
             }
-        }
-        return alumno;
+        };
+        return getJdbcTemplate().queryForObject(OBTIENE_ALUMNO, new String[]{matricula}, mapper);
+//        Alumno alumno = null;
+//        for (int pos = 0; pos < alumnos.size(); pos++) {
+//            Alumno a = alumnos.get(pos);
+//            if (a.getMatricula().equals(matricula)) {
+//                alumno = a;
+//                break;
+//            }
+//        }
+//        return alumno;
     }
 }

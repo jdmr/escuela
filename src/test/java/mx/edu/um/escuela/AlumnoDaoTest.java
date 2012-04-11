@@ -103,7 +103,7 @@ public class AlumnoDaoTest {
         Alumno result = instance.actualiza(alumno);
         assertNotNull(result);
         assertEquals("Jorge David", result.getNombre());
-        assertEquals("Jorge David", instance.lista().get(0).getNombre());
+        assertEquals("Jorge David", instance.obtiene("0001").getNombre());
     }
 
     /**
