@@ -37,14 +37,16 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
 @Repository("alumnoDao")
+@Transactional
 public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
-
+    
     private static final Logger log = LoggerFactory.getLogger(AlumnoDaoJdbc.class);
     private static final String CREAR_TABLA = "CREATE TABLE ALUMNOS("
             + "ID SERIAL, "
@@ -63,14 +65,14 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     private static final String ELIMINA_ALUMNO = "DELETE FROM alumnos WHERE matricula = ?";
     private static final String LISTA_ALUMNOS = "SELECT id, matricula, nombre, apellido, fecha_nacimiento, es_hombre, correo FROM alumnos";
     private List<Alumno> alumnos = new ArrayList<>();
-
+    
     @Autowired
     public AlumnoDaoJdbc(DataSource dataSource) {
         setDataSource(dataSource);
         inicializa();
         log.info("Creando una nueva instancia de AlumnoDao");
     }
-
+    
     private void inicializa() {
         log.info("Inicializando tablas de alumnos...");
         getJdbcTemplate().update(ELIMINA_TABLA);
@@ -78,12 +80,13 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
         this.crea(new Alumno("0001", "David", "Mendoza", new Date(), true, "david.mendoza@um.edu.mx"));
         this.crea(new Alumno("0002", "Dulce", "Alvarado", new Date(), false, "dulce.alvarado@um.edu.mx"));
     }
-
+    
     @Override
+    @Transactional(readOnly = true)
     public List<Alumno> lista() {
         log.debug("Obteniendo lista de usuarios");
         RowMapper<Alumno> mapper = new RowMapper<Alumno>() {
-
+            
             @Override
             public Alumno mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Alumno alumno = new Alumno();
@@ -102,16 +105,16 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
             }
         };
         List<Alumno> lista = getJdbcTemplate().query(LISTA_ALUMNOS, mapper);
-
+        
         return lista;
     }
-
+    
     @Override
     public Alumno crea(final Alumno alumno) {
         log.debug("Creando al alumno {}", alumno);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         getJdbcTemplate().update(new PreparedStatementCreator() {
-
+            
             @Override
             public PreparedStatement createPreparedStatement(
                     Connection connection) throws SQLException {
@@ -135,16 +138,16 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
             }
         }, keyHolder);
         alumno.setId(keyHolder.getKey().longValue());
-
+        
         alumnos.add(alumno);
         return alumno;
     }
-
+    
     @Override
     public Alumno actualiza(Alumno alumno) {
         log.debug("Actualizando al alumno {}", alumno);
         getJdbcTemplate().update(ACTUALIZAR_ALUMNO, alumno.getNombre(), alumno.getApellido(), alumno.getFechaNacimiento(), alumno.getEsHombre(), alumno.getCorreo(), alumno.getMatricula());
-
+        
         for (int pos = 0; pos < alumnos.size(); pos++) {
             Alumno a = alumnos.get(pos);
             if (a.getMatricula().equals(alumno.getMatricula())) {
@@ -154,13 +157,13 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
         }
         return alumno;
     }
-
+    
     @Override
     public String elimina(Alumno alumno) {
         log.debug("Eliminando al alumno {}", alumno);
         String matricula = alumno.getMatricula();
         getJdbcTemplate().update(ELIMINA_ALUMNO, matricula);
-
+        
         for (int pos = 0; pos < alumnos.size(); pos++) {
             Alumno a = alumnos.get(pos);
             if (a.getMatricula().equals(alumno.getMatricula())) {
@@ -170,12 +173,12 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
         }
         return matricula;
     }
-
+    
     @Override
     public Alumno obtiene(String matricula) {
         log.debug("Obteniendo al alumno con la matricula {}", matricula);
         RowMapper<Alumno> mapper = new RowMapper<Alumno>() {
-
+            
             @Override
             public Alumno mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Alumno alumno = new Alumno();
