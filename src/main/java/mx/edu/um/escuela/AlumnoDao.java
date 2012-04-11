@@ -23,76 +23,22 @@
  */
 package mx.edu.um.escuela;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
-@Repository
-public class AlumnoDao {
+public interface AlumnoDao {
+
+    Alumno actualiza(Alumno alumno);
+
+    Alumno crea(Alumno alumno);
+
+    String elimina(Alumno alumno);
+
+    List<Alumno> lista();
+
+    Alumno obtiene(String matricula);
     
-    private static final Logger log = LoggerFactory.getLogger(AlumnoDao.class);
-
-    private List<Alumno> alumnos = new ArrayList<>();
-
-    public AlumnoDao() {
-        log.info("Creando una nueva instancia de AlumnoDao");
-        alumnos.add(new Alumno("0001", "David", "Mendoza", new Date(), true, "david.mendoza@um.edu.mx"));
-        alumnos.add(new Alumno("0002", "Dulce", "Alvarado", new Date(), true, "dulce.alvarado@um.edu.mx"));
-    }
-
-    public List<Alumno> lista() {
-        log.debug("Obteniendo lista de usuarios");
-        return alumnos;
-    }
-
-    public Alumno crea(Alumno alumno) {
-        log.debug("Creando al alumno {}", alumno);
-        alumnos.add(alumno);
-        return alumno;
-    }
-
-    public Alumno actualiza(Alumno alumno) {
-        log.debug("Actualizando al alumno {}", alumno);
-        for (int pos = 0; pos < alumnos.size(); pos++) {
-            Alumno a = alumnos.get(pos);
-            if (a.getMatricula().equals(alumno.getMatricula())) {
-                alumnos.set(pos, alumno);
-                break;
-            }
-        }
-        return alumno;
-    }
-
-    public String elimina(Alumno alumno) {
-        log.debug("Eliminando al alumno {}", alumno);
-        String matricula = alumno.getMatricula();
-        for (int pos = 0; pos < alumnos.size(); pos++) {
-            Alumno a = alumnos.get(pos);
-            if (a.getMatricula().equals(alumno.getMatricula())) {
-                alumnos.remove(pos);
-                break;
-            }
-        }
-        return matricula;
-    }
-    
-    public Alumno obtiene(String matricula) {
-        log.debug("Obteniendo al alumno con la matricula {}", matricula);
-        Alumno alumno = null;
-        for (int pos = 0; pos < alumnos.size(); pos++) {
-            Alumno a = alumnos.get(pos);
-            if (a.getMatricula().equals(matricula)) {
-                alumno = a;
-                break;
-            }
-        }
-        return alumno;
-    }
 }

@@ -30,6 +30,7 @@ import java.util.Date;
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
 public class Alumno {
+    private Long id;
     private String matricula;
     private String nombre;
     private String apellido;
@@ -52,6 +53,20 @@ public class Alumno {
         this.fechaNacimiento = fechaNacimiento;
         this.esHombre = esHombre;
         this.correo = correo;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**

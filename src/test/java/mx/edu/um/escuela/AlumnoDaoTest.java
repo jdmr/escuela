@@ -67,7 +67,7 @@ public class AlumnoDaoTest {
     }
 
     /**
-     * Test of lista method, of class AlumnoDao.
+     * Test of lista method, of class AlumnoDaoJdbc.
      */
     @Test
     public void testLista() {
@@ -78,7 +78,7 @@ public class AlumnoDaoTest {
     }
 
     /**
-     * Test of crea method, of class AlumnoDao.
+     * Test of crea method, of class AlumnoDaoJdbc.
      */
     @Test
     public void testCrea() {
@@ -92,7 +92,7 @@ public class AlumnoDaoTest {
     }
 
     /**
-     * Test of actualiza method, of class AlumnoDao.
+     * Test of actualiza method, of class AlumnoDaoJdbc.
      */
     @Test
     public void testActualiza() {
@@ -107,7 +107,7 @@ public class AlumnoDaoTest {
     }
 
     /**
-     * Test of elimina method, of class AlumnoDao.
+     * Test of elimina method, of class AlumnoDaoJdbc.
      */
     @Test
     public void testElimina() {
@@ -121,7 +121,7 @@ public class AlumnoDaoTest {
     }
 
     /**
-     * Test of obtiene method, of class AlumnoDao.
+     * Test of obtiene method, of class AlumnoDaoJdbc.
      */
     @Test
     public void testObtiene() {
