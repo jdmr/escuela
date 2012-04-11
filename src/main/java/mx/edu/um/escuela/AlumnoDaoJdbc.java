@@ -60,6 +60,8 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     private static final String CREAR_ALUMNO = "INSERT INTO ALUMNOS(MATRICULA, NOMBRE, APELLIDO, FECHA_NACIMIENTO, ES_HOMBRE, CORREO) VALUES(?,?,?,?,?,?)";
     private static final String ACTUALIZAR_ALUMNO = "UPDATE alumnos SET nombre = ?, apellido = ?, fecha_nacimiento = ?, es_hombre = ?, correo = ? WHERE matricula = ?";
     private static final String OBTIENE_ALUMNO = "SELECT id, matricula, nombre, apellido, fecha_nacimiento, es_hombre, correo FROM alumnos WHERE matricula = ?";
+    private static final String ELIMINA_ALUMNO = "DELETE FROM alumnos WHERE matricula = ?";
+    private static final String LISTA_ALUMNOS = "SELECT id, matricula, nombre, apellido, fecha_nacimiento, es_hombre, correo FROM alumnos";
     private List<Alumno> alumnos = new ArrayList<>();
 
     @Autowired
@@ -80,7 +82,28 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     @Override
     public List<Alumno> lista() {
         log.debug("Obteniendo lista de usuarios");
-        return alumnos;
+        RowMapper<Alumno> mapper = new RowMapper<Alumno>() {
+
+            @Override
+            public Alumno mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Alumno alumno = new Alumno();
+                alumno.setId(rs.getLong("id"));
+                alumno.setMatricula(rs.getString("matricula"));
+                alumno.setNombre(rs.getString("nombre"));
+                alumno.setApellido(rs.getString("apellido"));
+                if (rs.getDate("fecha_nacimiento") != null) {
+                    alumno.setFechaNacimiento(new Date(rs.getDate("fecha_nacimiento").getTime()));
+                }
+                alumno.setEsHombre(rs.getBoolean("es_hombre"));
+                if (rs.getString("correo") != null) {
+                    alumno.setCorreo(rs.getString("correo"));
+                }
+                return alumno;
+            }
+        };
+        List<Alumno> lista = getJdbcTemplate().query(LISTA_ALUMNOS, mapper);
+
+        return lista;
     }
 
     @Override
@@ -121,7 +144,7 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     public Alumno actualiza(Alumno alumno) {
         log.debug("Actualizando al alumno {}", alumno);
         getJdbcTemplate().update(ACTUALIZAR_ALUMNO, alumno.getNombre(), alumno.getApellido(), alumno.getFechaNacimiento(), alumno.getEsHombre(), alumno.getCorreo(), alumno.getMatricula());
-        
+
         for (int pos = 0; pos < alumnos.size(); pos++) {
             Alumno a = alumnos.get(pos);
             if (a.getMatricula().equals(alumno.getMatricula())) {
@@ -136,6 +159,8 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     public String elimina(Alumno alumno) {
         log.debug("Eliminando al alumno {}", alumno);
         String matricula = alumno.getMatricula();
+        getJdbcTemplate().update(ELIMINA_ALUMNO, matricula);
+
         for (int pos = 0; pos < alumnos.size(); pos++) {
             Alumno a = alumnos.get(pos);
             if (a.getMatricula().equals(alumno.getMatricula())) {

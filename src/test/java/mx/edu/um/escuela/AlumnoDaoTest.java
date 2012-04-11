@@ -31,6 +31,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -109,15 +110,16 @@ public class AlumnoDaoTest {
     /**
      * Test of elimina method, of class AlumnoDaoJdbc.
      */
-    @Test
+    @Test(expected = EmptyResultDataAccessException.class)
     public void testElimina() {
         log.debug("elimina");
-        Alumno alumno = instance.lista().get(0);
-        Integer size = instance.lista().size();
+        Alumno alumno = instance.obtiene("0001");
+        String matricula = alumno.getMatricula();
 
         String result = instance.elimina(alumno);
-        assertEquals("0001", result);
-        assertEquals(size - 1, instance.lista().size());
+        assertEquals(matricula, result);
+        instance.obtiene(matricula);
+        fail("Debio lanzar una excepcion de alumno no encontrado");
     }
 
     /**
