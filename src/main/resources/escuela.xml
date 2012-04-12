@@ -21,8 +21,8 @@
     <aop:config>
         <aop:aspect ref="aspectoCreando">
             <aop:pointcut 
-            id="creandoPointcut" 
-            expression="execution(* mx.edu.um.escuela.AlumnoDao.crea(..))" />
+                id="creandoPointcut" 
+                expression="execution(* mx.edu.um.escuela.AlumnoDao.crea(..))" />
             
             <aop:after pointcut-ref="creandoPointcut" method="creando" />
         </aop:aspect>
@@ -37,9 +37,17 @@
         <property name="maxActive" value="10" />
     </bean>
     
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="mx.edu.um.escuela" />
+    </bean>
+
+    <bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>
+    
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
     </bean>
     
     <tx:annotation-driven />
+    
 </beans>

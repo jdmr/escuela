@@ -38,15 +38,16 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
 @Repository("alumnoDao")
 @Transactional
-public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
+public class AlumnoDaoHibernate extends JdbcDaoSupport implements AlumnoDao {
 
-    private static final Logger log = LoggerFactory.getLogger(AlumnoDaoJdbc.class);
+    private static final Logger log = LoggerFactory.getLogger(AlumnoDaoHibernate.class);
     private static final String CREAR_TABLA = "CREATE TABLE ALUMNOS("
             + "ID SERIAL, "
             + "MATRICULA VARCHAR(10) NOT NULL UNIQUE, "
@@ -65,7 +66,7 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
     private static final String LISTA_ALUMNOS = "SELECT id, matricula, nombre, apellido, fecha_nacimiento, es_hombre, correo FROM alumnos";
 
     @Autowired
-    public AlumnoDaoJdbc(DataSource dataSource) {
+    public AlumnoDaoHibernate(DataSource dataSource) {
         setDataSource(dataSource);
         inicializa();
         log.info("Creando una nueva instancia de AlumnoDao");
@@ -144,7 +145,6 @@ public class AlumnoDaoJdbc extends JdbcDaoSupport implements AlumnoDao {
         return getJdbcTemplate().queryForObject(OBTIENE_ALUMNO, new String[]{matricula}, new AlumnoMapper());
     }
 }
-
 class AlumnoMapper implements RowMapper<Alumno> {
 
     @Override
