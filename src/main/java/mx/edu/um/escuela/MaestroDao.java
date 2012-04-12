@@ -23,66 +23,22 @@
  */
 package mx.edu.um.escuela;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
-@Repository
-public class MaestroDao {
+public interface MaestroDao {
 
-    private List<Maestro> maestros = new ArrayList<>();
+    Maestro actualiza(Maestro maestro);
 
-    public MaestroDao() {
-        maestros.add(new Maestro("0001", "David", "Mendoza", new Date(), true, "david.mendoza@um.edu.mx"));
-        maestros.add(new Maestro("0002", "Dulce", "Alvarado", new Date(), true, "dulce.alvarado@um.edu.mx"));
-    }
+    Maestro crea(Maestro maestro);
 
-    public List<Maestro> lista() {
-        return maestros;
-    }
+    String elimina(Maestro maestro);
 
-    public Maestro crea(Maestro maestro) {
-        maestros.add(maestro);
-        return maestro;
-    }
+    List<Maestro> lista();
 
-    public Maestro actualiza(Maestro maestro) {
-        for (int pos = 0; pos < maestros.size(); pos++) {
-            Maestro a = maestros.get(pos);
-            if (a.getNomina().equals(maestro.getNomina())) {
-                maestros.set(pos, maestro);
-                break;
-            }
-        }
-        return maestro;
-    }
-
-    public String elimina(Maestro maestro) {
-        String nomina = maestro.getNomina();
-        for (int pos = 0; pos < maestros.size(); pos++) {
-            Maestro a = maestros.get(pos);
-            if (a.getNomina().equals(maestro.getNomina())) {
-                maestros.remove(pos);
-                break;
-            }
-        }
-        return nomina;
-    }
+    Maestro obtiene(String nomina);
     
-    public Maestro obtiene(String nomina) {
-        Maestro maestro = null;
-        for (int pos = 0; pos < maestros.size(); pos++) {
-            Maestro a = maestros.get(pos);
-            if (a.getNomina().equals(nomina)) {
-                maestro = a;
-                break;
-            }
-        }
-        return maestro;
-    }
 }

@@ -30,6 +30,7 @@ import java.util.Date;
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
 public class Maestro {
+    private Long id;
     private String nomina;
     private String nombre;
     private String apellido;
@@ -52,6 +53,20 @@ public class Maestro {
         this.fechaNacimiento = fechaNacimiento;
         this.esHombre = esHombre;
         this.correo = correo;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**
@@ -140,7 +155,7 @@ public class Maestro {
 
     @Override
     public String toString() {
-        return "Alumno{" + "nomina=" + nomina + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + ", esHombre=" + esHombre + ", correo=" + correo + '}';
+        return "Maestro{" + "nomina=" + nomina + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + ", esHombre=" + esHombre + ", correo=" + correo + '}';
     }
     
 }

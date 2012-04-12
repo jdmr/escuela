@@ -31,8 +31,10 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -40,6 +42,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:escuela.xml"})
+@Transactional
 public class MaestroDaoTest {
 
     private static final Logger log = LoggerFactory.getLogger(MaestroDaoTest.class);
@@ -66,7 +69,7 @@ public class MaestroDaoTest {
     }
 
     /**
-     * Test of lista method, of class MaestroDao.
+     * Test of lista method, of class MaestroDaoJdbc.
      */
     @Test
     public void testLista() {
@@ -77,7 +80,7 @@ public class MaestroDaoTest {
     }
 
     /**
-     * Test of crea method, of class MaestroDao.
+     * Test of crea method, of class MaestroDaoJdbc.
      */
     @Test
     public void testCrea() {
@@ -91,36 +94,36 @@ public class MaestroDaoTest {
     }
 
     /**
-     * Test of actualiza method, of class MaestroDao.
+     * Test of actualiza method, of class MaestroDaoJdbc.
      */
     @Test
     public void testActualiza() {
         log.debug("actualiza");
-        Maestro maestro = instance.lista().get(0);
+        Maestro maestro = instance.obtiene("0001");
         maestro.setNombre("Jorge David");
 
         Maestro result = instance.actualiza(maestro);
         assertNotNull(result);
         assertEquals("Jorge David", result.getNombre());
-        assertEquals("Jorge David", instance.lista().get(0).getNombre());
+        assertEquals("Jorge David", instance.obtiene("0001").getNombre());
     }
 
     /**
-     * Test of elimina method, of class MaestroDao.
+     * Test of elimina method, of class MaestroDaoJdbc.
      */
-    @Test
+    @Test(expected = EmptyResultDataAccessException.class)
     public void testElimina() {
         log.debug("elimina");
-        Maestro maestro = instance.lista().get(0);
-        Integer size = instance.lista().size();
+        Maestro maestro = instance.obtiene("0001");
 
         String result = instance.elimina(maestro);
         assertEquals("0001", result);
-        assertEquals(size - 1, instance.lista().size());
+        instance.obtiene("0001");
+        fail("Debio lanzar excepcion de maestro no encontrado");
     }
 
     /**
-     * Test of obtiene method, of class MaestroDao.
+     * Test of obtiene method, of class MaestroDaoJdbc.
      */
     @Test
     public void testObtiene() {
