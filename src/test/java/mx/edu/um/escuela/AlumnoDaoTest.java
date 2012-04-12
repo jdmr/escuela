@@ -112,7 +112,7 @@ public class AlumnoDaoTest {
     /**
      * Test of elimina method, of class AlumnoDaoJdbc.
      */
-    @Test(expected = EmptyResultDataAccessException.class)
+    @Test
     public void testElimina() {
         log.debug("elimina");
         Alumno alumno = instance.obtiene("0001");
@@ -120,8 +120,7 @@ public class AlumnoDaoTest {
 
         String result = instance.elimina(alumno);
         assertEquals(matricula, result);
-        instance.obtiene(matricula);
-        fail("Debio lanzar una excepcion de alumno no encontrado");
+        assertNull(instance.obtiene(matricula));
     }
 
     /**

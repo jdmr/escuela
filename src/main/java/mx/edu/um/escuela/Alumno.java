@@ -23,19 +23,35 @@
  */
 package mx.edu.um.escuela;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.*;
 
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
-public class Alumno {
+@Entity
+@Table(name = "alumnos")
+public class Alumno implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Version
+    private Integer version;
+    @Column(unique = true, length = 10, nullable = false)
     private String matricula;
+    @Column(length = 64, nullable = false)
     private String nombre;
+    @Column(length = 64, nullable = false)
     private String apellido;
+    @Temporal(TemporalType.DATE)
+    @Column(name="fecha_nacimiento")
     private Date fechaNacimiento;
+    @Column(name="es_hombre")
     private Boolean esHombre = true;
+    @Column(length = 128)
     private String correo;
 
     public Alumno() {
@@ -67,6 +83,20 @@ public class Alumno {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * @return the version
+     */
+    public Integer getVersion() {
+        return version;
+    }
+
+    /**
+     * @param version the version to set
+     */
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     /**
@@ -157,5 +187,4 @@ public class Alumno {
     public String toString() {
         return "Alumno{" + "matricula=" + matricula + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + ", esHombre=" + esHombre + ", correo=" + correo + '}';
     }
-    
 }

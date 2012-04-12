@@ -23,18 +23,13 @@
  */
 package mx.edu.um.escuela;
 
-import java.sql.*;
-import java.util.Date;
 import java.util.List;
-import javax.sql.DataSource;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,88 +40,41 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository("alumnoDao")
 @Transactional
-public class AlumnoDaoHibernate extends JdbcDaoSupport implements AlumnoDao {
+public class AlumnoDaoHibernate implements AlumnoDao {
 
     private static final Logger log = LoggerFactory.getLogger(AlumnoDaoHibernate.class);
-    private static final String CREAR_TABLA = "CREATE TABLE ALUMNOS("
-            + "ID SERIAL, "
-            + "MATRICULA VARCHAR(10) NOT NULL UNIQUE, "
-            + "NOMBRE VARCHAR(64) NOT NULL, "
-            + "APELLIDO VARCHAR(64) NOT NULL, "
-            + "FECHA_NACIMIENTO DATE, "
-            + "ES_HOMBRE BOOLEAN DEFAULT TRUE, "
-            + "CORREO VARCHAR(128), "
-            + "PRIMARY KEY(ID)"
-            + ")";
-    private static final String ELIMINA_TABLA = "DROP TABLE IF EXISTS ALUMNOS";
-    private static final String CREAR_ALUMNO = "INSERT INTO ALUMNOS(MATRICULA, NOMBRE, APELLIDO, FECHA_NACIMIENTO, ES_HOMBRE, CORREO) VALUES(?,?,?,?,?,?)";
-    private static final String ACTUALIZAR_ALUMNO = "UPDATE alumnos SET nombre = ?, apellido = ?, fecha_nacimiento = ?, es_hombre = ?, correo = ? WHERE matricula = ?";
-    private static final String OBTIENE_ALUMNO = "SELECT id, matricula, nombre, apellido, fecha_nacimiento, es_hombre, correo FROM alumnos WHERE matricula = ?";
-    private static final String ELIMINA_ALUMNO = "DELETE FROM alumnos WHERE matricula = ?";
-    private static final String LISTA_ALUMNOS = "SELECT id, matricula, nombre, apellido, fecha_nacimiento, es_hombre, correo FROM alumnos";
-
     @Autowired
-    public AlumnoDaoHibernate(DataSource dataSource) {
-        setDataSource(dataSource);
-        inicializa();
-        log.info("Creando una nueva instancia de AlumnoDao");
+    private SessionFactory sessionFactory;
+    
+    private Session currentSession() {
+        return sessionFactory.getCurrentSession();
     }
 
-    private void inicializa() {
-        log.info("Inicializando tablas de alumnos...");
-        getJdbcTemplate().update(ELIMINA_TABLA);
-        getJdbcTemplate().update(CREAR_TABLA);
-        this.crea(new Alumno("0001", "David", "Mendoza", new Date(), true, "david.mendoza@um.edu.mx"));
-        this.crea(new Alumno("0002", "Dulce", "Alvarado", new Date(), false, "dulce.alvarado@um.edu.mx"));
+    public AlumnoDaoHibernate() {
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Alumno> lista() {
-        log.debug("Obteniendo lista de usuarios");
-        List<Alumno> lista = getJdbcTemplate().query(LISTA_ALUMNOS, new AlumnoMapper());
-
-        return lista;
+        log.debug("Obteniendo lista de alumnos");
+        Query query = currentSession().createQuery("select a from Alumno a order by a.matricula");
+        List<Alumno> alumnos = query.list();
+        return alumnos;
     }
 
     @Override
     public Alumno crea(final Alumno alumno) {
         log.debug("Creando al alumno {}", alumno);
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        getJdbcTemplate().update(new PreparedStatementCreator() {
-
-            @Override
-            public PreparedStatement createPreparedStatement(
-                    Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(
-                        CREAR_ALUMNO, new String[]{"id"});
-                ps.setString(1, alumno.getMatricula());
-                ps.setString(2, alumno.getNombre());
-                ps.setString(3, alumno.getApellido());
-                if (alumno.getFechaNacimiento() != null) {
-                    ps.setDate(4, new java.sql.Date(alumno.getFechaNacimiento().getTime()));
-                } else {
-                    ps.setNull(4, Types.DATE);
-                }
-                ps.setBoolean(5, alumno.getEsHombre());
-                if (alumno.getCorreo() != null) {
-                    ps.setString(6, alumno.getCorreo());
-                } else {
-                    ps.setNull(6, Types.VARCHAR);
-                }
-                return ps;
-            }
-        }, keyHolder);
-        alumno.setId(keyHolder.getKey().longValue());
-
+        currentSession().save(alumno);
         return alumno;
     }
 
     @Override
     public Alumno actualiza(Alumno alumno) {
         log.debug("Actualizando al alumno {}", alumno);
-        getJdbcTemplate().update(ACTUALIZAR_ALUMNO, alumno.getNombre(), alumno.getApellido(), alumno.getFechaNacimiento(), alumno.getEsHombre(), alumno.getCorreo(), alumno.getMatricula());
 
+        currentSession().update(alumno);
+        
         return alumno;
     }
 
@@ -134,33 +82,17 @@ public class AlumnoDaoHibernate extends JdbcDaoSupport implements AlumnoDao {
     public String elimina(Alumno alumno) {
         log.debug("Eliminando al alumno {}", alumno);
         String matricula = alumno.getMatricula();
-        getJdbcTemplate().update(ELIMINA_ALUMNO, matricula);
 
+        currentSession().delete(alumno);
+        
         return matricula;
     }
 
     @Override
     public Alumno obtiene(String matricula) {
         log.debug("Obteniendo al alumno con la matricula {}", matricula);
-        return getJdbcTemplate().queryForObject(OBTIENE_ALUMNO, new String[]{matricula}, new AlumnoMapper());
-    }
-}
-class AlumnoMapper implements RowMapper<Alumno> {
-
-    @Override
-    public Alumno mapRow(ResultSet rs, int i) throws SQLException {
-        Alumno alumno = new Alumno();
-        alumno.setId(rs.getLong("id"));
-        alumno.setMatricula(rs.getString("matricula"));
-        alumno.setNombre(rs.getString("nombre"));
-        alumno.setApellido(rs.getString("apellido"));
-        if (rs.getDate("fecha_nacimiento") != null) {
-            alumno.setFechaNacimiento(new Date(rs.getDate("fecha_nacimiento").getTime()));
-        }
-        alumno.setEsHombre(rs.getBoolean("es_hombre"));
-        if (rs.getString("correo") != null) {
-            alumno.setCorreo(rs.getString("correo"));
-        }
-        return alumno;
+        Query query = currentSession().createQuery("select a from Alumno a where matricula = :matricula");
+        query.setString("matricula", matricula);
+        return (Alumno) query.uniqueResult();
     }
 }
