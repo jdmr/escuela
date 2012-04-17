@@ -21,49 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mx.edu.um.escuela;
+package mx.edu.um.escuela.model;
 
-import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *
  * @author J. David Mendoza <jdmendoza@um.edu.mx>
  */
-@Entity
-@Table(name = "alumnos")
-public class Alumno implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Maestro {
     private Long id;
-    @Version
-    private Integer version;
-    @Column(unique = true, length = 10, nullable = false)
-    private String matricula;
-    @Column(length = 64, nullable = false)
+    private String nomina;
     private String nombre;
-    @Column(length = 64, nullable = false)
     private String apellido;
-    @Temporal(TemporalType.DATE)
-    @Column(name="fecha_nacimiento")
     private Date fechaNacimiento;
-    @Column(name="es_hombre")
     private Boolean esHombre = true;
-    @Column(length = 128)
     private String correo;
 
-    public Alumno() {
+    public Maestro() {
     }
 
-    public Alumno(String nombre, String apellido) {
+    public Maestro(String nombre, String apellido) {
         this.nombre = nombre;
         this.apellido = apellido;
     }
 
-    public Alumno(String matricula, String nombre, String apellido, Date fechaNacimiento, Boolean esHombre, String correo) {
-        this.matricula = matricula;
+    public Maestro(String nomina, String nombre, String apellido, Date fechaNacimiento, Boolean esHombre, String correo) {
+        this.nomina = nomina;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
@@ -86,31 +70,17 @@ public class Alumno implements Serializable {
     }
 
     /**
-     * @return the version
+     * @return the nomina
      */
-    public Integer getVersion() {
-        return version;
+    public String getNomina() {
+        return nomina;
     }
 
     /**
-     * @param version the version to set
+     * @param nomina the nomina to set
      */
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    /**
-     * @return the matricula
-     */
-    public String getMatricula() {
-        return matricula;
-    }
-
-    /**
-     * @param matricula the matricula to set
-     */
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
+    public void setNomina(String nomina) {
+        this.nomina = nomina;
     }
 
     /**
@@ -185,6 +155,7 @@ public class Alumno implements Serializable {
 
     @Override
     public String toString() {
-        return "Alumno{" + "matricula=" + matricula + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + ", esHombre=" + esHombre + ", correo=" + correo + '}';
+        return "Maestro{" + "nomina=" + nomina + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + ", esHombre=" + esHombre + ", correo=" + correo + '}';
     }
+    
 }

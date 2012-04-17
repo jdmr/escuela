@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mx.edu.um.escuela;
+package mx.edu.um.escuela.dao;
 
 import java.util.List;
+import mx.edu.um.escuela.model.Alumno;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -53,8 +54,8 @@ public class AlumnoDaoHibernate implements AlumnoDao {
     public AlumnoDaoHibernate() {
     }
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public List<Alumno> lista() {
         log.debug("Obteniendo lista de alumnos");
         Query query = currentSession().createQuery("select a from Alumno a order by a.matricula");

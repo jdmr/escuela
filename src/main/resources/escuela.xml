@@ -19,13 +19,13 @@
                                 expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
     
-    <bean name="aspectoCreando" class="mx.edu.um.escuela.AspectoCreando" />
+    <bean name="aspectoCreando" class="mx.edu.um.escuela.util.AspectoCreando" />
     
     <aop:config>
         <aop:aspect ref="aspectoCreando">
             <aop:pointcut 
                 id="creandoPointcut" 
-                expression="execution(* mx.edu.um.escuela.AlumnoDao.crea(..))" />
+                expression="execution(* mx.edu.um.escuela.dao.AlumnoDao.crea(..))" />
             
             <aop:after pointcut-ref="creandoPointcut" method="creando" />
         </aop:aspect>
@@ -42,7 +42,7 @@
     
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="mx.edu.um.escuela" />
+        <property name="packagesToScan" value="mx.edu.um.escuela.model" />
     </bean>
 
     <bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>

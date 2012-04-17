@@ -21,9 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mx.edu.um.escuela;
+package mx.edu.um.escuela.dao;
 
 import java.util.List;
+import mx.edu.um.escuela.model.Alumno;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -33,10 +35,11 @@ public interface AlumnoDao {
 
     Alumno actualiza(Alumno alumno);
 
-    Alumno crea(Alumno alumno);
+    Alumno crea(final Alumno alumno);
 
     String elimina(Alumno alumno);
 
+    @Transactional(readOnly = true)
     List<Alumno> lista();
 
     Alumno obtiene(String matricula);

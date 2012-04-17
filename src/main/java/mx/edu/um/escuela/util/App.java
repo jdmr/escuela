@@ -1,6 +1,11 @@
-package mx.edu.um.escuela;
+package mx.edu.um.escuela.util;
 
 import java.util.Scanner;
+import mx.edu.um.escuela.dao.AlumnoDao;
+import mx.edu.um.escuela.dao.AlumnoDaoHibernate;
+import mx.edu.um.escuela.dao.MaestroDao;
+import mx.edu.um.escuela.model.Alumno;
+import mx.edu.um.escuela.model.Maestro;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +21,7 @@ public class App {
 
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("escuela.xml");
-        AlumnoDao alumnoDao = (AlumnoDao) context.getBean("alumnoDao");
+        AlumnoDao alumnoDao = (AlumnoDaoHibernate) context.getBean("alumnoDao");
         MaestroDao maestroDao = (MaestroDao) context.getBean("maestroDao");
         
         log.info("Menu:");

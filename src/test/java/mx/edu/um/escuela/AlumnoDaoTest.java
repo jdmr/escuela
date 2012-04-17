@@ -23,8 +23,10 @@
  */
 package mx.edu.um.escuela;
 
+import mx.edu.um.escuela.model.Alumno;
 import java.util.Date;
 import java.util.List;
+import mx.edu.um.escuela.dao.AlumnoDao;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.runner.RunWith;

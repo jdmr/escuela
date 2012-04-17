@@ -1,5 +1,6 @@
 package mx.edu.um.escuela;
 
+import mx.edu.um.escuela.util.App;
 import junit.framework.Assert;
 import org.junit.Test;
 

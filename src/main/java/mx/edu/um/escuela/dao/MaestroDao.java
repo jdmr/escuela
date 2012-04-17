@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package mx.edu.um.escuela;
+package mx.edu.um.escuela.dao;
 
 import java.util.List;
+import mx.edu.um.escuela.model.Maestro;
 
 /**
  *

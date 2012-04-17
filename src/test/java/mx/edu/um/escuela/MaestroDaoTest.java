@@ -23,6 +23,8 @@
  */
 package mx.edu.um.escuela;
 
+import mx.edu.um.escuela.dao.MaestroDao;
+import mx.edu.um.escuela.model.Maestro;
 import java.util.Date;
 import java.util.List;
 import static org.junit.Assert.*;
