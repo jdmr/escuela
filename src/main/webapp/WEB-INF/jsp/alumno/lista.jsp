@@ -14,7 +14,14 @@
     </head>
     <body>
         <h1>Lista de Alumnos</h1>
-        <p>${hola}</p>
+        <div>
+            <a href="<c:url value='/alumno/nuevo' />">Nuevo Alumno</a>
+        </div>
+        <c:if test="${not empty mensaje}">
+            <div>
+                <p>${mensaje}</p>
+            </div>
+        </c:if>
         <table>
             <thead>
                 <tr>
@@ -29,7 +36,7 @@
             <tbody>
                 <c:forEach items="${alumnos}" var="alumno">
                     <tr>
-                        <td>${alumno.matricula}</td>
+                        <td><a href="<c:url value='/alumno/ver/${alumno.matricula}'/>">${alumno.matricula}</a></td>
                         <td>${alumno.nombre}</td>
                         <td>${alumno.apellido}</td>
                         <td>${alumno.fechaNacimiento}</td>

@@ -24,6 +24,7 @@
 package mx.edu.um.escuela.web;
 
 import java.util.List;
+import javax.validation.Valid;
 import mx.edu.um.escuela.dao.AlumnoDao;
 import mx.edu.um.escuela.model.Alumno;
 import org.slf4j.Logger;
@@ -31,7 +32,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -48,10 +53,68 @@ public class AlumnoController {
     @RequestMapping
     public String lista(Model modelo) {
         log.info("Mostrando lista de alumnos");
-        
+
         List<Alumno> alumnos = alumnoDao.lista();
-        modelo.addAttribute("hola", "Hola desde en controlador de alumnos");
         modelo.addAttribute("alumnos", alumnos);
         return "alumno/lista";
+    }
+
+    @RequestMapping("/nuevo")
+    public String nuevo(Model modelo) {
+        Alumno alumno = new Alumno();
+        modelo.addAttribute("alumno", alumno);
+
+        return "alumno/nuevo";
+    }
+
+    @RequestMapping("/crea")
+    public String crea(@Valid Alumno alumno, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.debug("Creando al alumno {}", alumno);
+        if (bindingResult.hasErrors()) {
+            return "alumno/nuevo";
+        }
+
+        alumno = alumnoDao.crea(alumno);
+
+        redirectAttributes.addFlashAttribute("mensaje", "El alumno "
+                + alumno.getMatricula()
+                + " ha sido creado");
+
+        return "redirect:/alumno/ver/" + alumno.getMatricula();
+    }
+
+    @RequestMapping("/ver/{matricula}")
+    public String ver(@PathVariable String matricula, Model modelo) {
+        Alumno alumno = alumnoDao.obtiene(matricula);
+        modelo.addAttribute("alumno", alumno);
+        return "alumno/ver";
+    }
+
+    @RequestMapping("/edita/{matricula}")
+    public String edita(@PathVariable String matricula, Model modelo) {
+        Alumno alumno = alumnoDao.obtiene(matricula);
+        modelo.addAttribute("alumno", alumno);
+        return "alumno/edita";
+    }
+
+
+    @RequestMapping(value = "/actualiza", method = RequestMethod.POST)
+    public String actualiza(@Valid Alumno alumno, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()) {
+            return "alumno/edita";
+        }
+        
+        alumno = alumnoDao.actualiza(alumno);
+        redirectAttributes.addFlashAttribute("mensaje", "El alumno "+ alumno.getMatricula() +" ha sido actualizado.");
+        
+        return "redirect:/alumno/ver/"+alumno.getMatricula();
+    }
+    
+    @RequestMapping("/elimina/{matricula}")
+    public String elimina(@PathVariable String matricula, RedirectAttributes redirectAttributes) {
+        Alumno alumno = alumnoDao.obtiene(matricula);
+        String nombre = alumnoDao.elimina(alumno);
+        redirectAttributes.addFlashAttribute("mensaje", "El alumno "+ nombre +" ha sido dado de baja.");
+        return "redirect:/alumno";
     }
 }

@@ -67,6 +67,7 @@ public class AlumnoDaoHibernate implements AlumnoDao {
     public Alumno crea(final Alumno alumno) {
         log.debug("Creando al alumno {}", alumno);
         currentSession().save(alumno);
+        currentSession().flush();
         return alumno;
     }
 
@@ -75,6 +76,7 @@ public class AlumnoDaoHibernate implements AlumnoDao {
         log.debug("Actualizando al alumno {}", alumno);
 
         currentSession().update(alumno);
+        currentSession().flush();
         
         return alumno;
     }
@@ -85,6 +87,7 @@ public class AlumnoDaoHibernate implements AlumnoDao {
         String matricula = alumno.getMatricula();
 
         currentSession().delete(alumno);
+        currentSession().flush();
         
         return matricula;
     }

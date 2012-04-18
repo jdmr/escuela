@@ -26,6 +26,10 @@ package mx.edu.um.escuela.model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -40,17 +44,26 @@ public class Alumno implements Serializable {
     private Long id;
     @Version
     private Integer version;
+    @NotBlank
+    @Size(max = 10)
     @Column(unique = true, length = 10, nullable = false)
     private String matricula;
+    @NotBlank
+    @Size(max = 64)
     @Column(length = 64, nullable = false)
     private String nombre;
+    @NotBlank
+    @Size(max = 64)
     @Column(length = 64, nullable = false)
     private String apellido;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Temporal(TemporalType.DATE)
-    @Column(name="fecha_nacimiento")
+    @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
-    @Column(name="es_hombre")
+    @Column(name = "es_hombre")
     private Boolean esHombre = true;
+    @Email
+    @Size(max = 128)
     @Column(length = 128)
     private String correo;
 
