@@ -10,35 +10,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Escuela</title>
-        <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css' />" type="text/css">
-        <link rel="stylesheet" href="<c:url value='/css/bootstrap-responsive.min.css' />" type="text/css">
-        <link rel="stylesheet" href="<c:url value='/css/app.css' />" type="text/css">
-
+        <title>Inicio</title>
     </head>
     <body>
-        <nav class="navbar">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="<c:url value='/'/>">Escuela</a>
-                    <div class="nav-collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="<c:url value='/'/>">Inicio</a></li>
-                            <li><a href='<c:url value="/alumno" />'>Alumnos</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="/WEB-INF/jsp/menu.jsp" >
+            <jsp:param name="menu" value="principal" />
+        </jsp:include>
         <h1>Hello World!</h1>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="<c:url value='/js/jquery-1.7.1.min.js'/>"><\/script>')</script>
-        <script src="<c:url value='/js/bootstrap.min.js' />"></script>
-        <script src="<c:url value='/js/app.js' />"></script>
     </body>
 </html>

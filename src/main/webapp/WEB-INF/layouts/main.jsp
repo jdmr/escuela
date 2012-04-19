@@ -29,10 +29,7 @@
                     </a>
                     <a class="brand" href="<c:url value='/'/>">Escuela</a>
                     <div class="nav-collapse">
-                        <ul class="nav">
-                            <li class="active"><a href="<c:url value='/'/>">Inicio</a></li>
-                            <li><a href='<c:url value="/alumno" />'>Alumnos</a></li>
-                        </ul>
+                        <sitemesh:write property="nav"/>
                     </div>
                 </div>
             </div>

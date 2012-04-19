@@ -14,6 +14,9 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <jsp:include page="../menu.jsp" >
+            <jsp:param name="menu" value="alumno" />
+        </jsp:include>
         <h1>Edita Alumno</h1>
         <c:url var="actualizaUrl" value="/alumno/actualiza" />
         <form:form commandName="alumno" action="${actualizaUrl}" method="post">

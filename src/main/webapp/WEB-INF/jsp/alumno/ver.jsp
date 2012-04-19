@@ -14,12 +14,15 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <jsp:include page="../menu.jsp" >
+            <jsp:param name="menu" value="alumno" />
+        </jsp:include>
         <h1>Alumno ${alumno.matricula}</h1>
-        <div>
-            <a href="<c:url value='/alumno'/>">Lista de Alumnos</a>
-            <a href="<c:url value='/alumno/nuevo'/>">Nuevo Alumno</a>
-            <a href="<c:url value='/alumno/edita/${alumno.matricula}'/>">Edita Alumno</a>
-            <a href="<c:url value='/alumno/elimina/${alumno.matricula}'/>">Elimina Alumno</a>
+        <div class="well">
+            <a href="<c:url value='/alumno'/>" class="btn btn-primary">Lista de Alumnos</a>
+            <a href="<c:url value='/alumno/nuevo'/>" class="btn btn-primary">Nuevo Alumno</a>
+            <a href="<c:url value='/alumno/edita/${alumno.matricula}'/>" class="btn btn-primary">Edita Alumno</a>
+            <a href="<c:url value='/alumno/elimina/${alumno.matricula}'/>" class="btn btn-danger" onclick="return confirm('¿Está seguro de que lo desea eliminar?');">Elimina Alumno</a>
         </div>
         <c:if test="${not empty mensaje}">
             <div>

@@ -13,16 +13,19 @@
         <title>Lista de Alumnos</title>
     </head>
     <body>
+        <jsp:include page="../menu.jsp" >
+            <jsp:param name="menu" value="alumno" />
+        </jsp:include>
         <h1>Lista de Alumnos</h1>
-        <div>
-            <a href="<c:url value='/alumno/nuevo' />">Nuevo Alumno</a>
+        <div class="well">
+            <a href="<c:url value='/alumno/nuevo' />" class="btn btn-primary"><i class="icon-user icon-white"></i> Nuevo Alumno</a>
         </div>
         <c:if test="${not empty mensaje}">
             <div>
                 <p>${mensaje}</p>
             </div>
         </c:if>
-        <table>
+        <table id="lista" class="table table-striped">
             <thead>
                 <tr>
                     <th>Matrícula</th>
@@ -41,10 +44,15 @@
                         <td>${alumno.apellido}</td>
                         <td>${alumno.fechaNacimiento}</td>
                         <td>${alumno.esHombre}</td>
-                        <td>${alumno.correo}</td>
+                        <td><a href="mailto:'${alumno.correo}'" target="_blank">${alumno.correo}</a></td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
+    <content>
+        <script type="text/javascript">
+            highlightMyTableRows('lista');
+        </script>
+    </content>
     </body>
 </html>

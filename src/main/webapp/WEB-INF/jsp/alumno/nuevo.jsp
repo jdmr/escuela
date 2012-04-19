@@ -14,6 +14,9 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <jsp:include page="../menu.jsp" >
+            <jsp:param name="menu" value="alumno" />
+        </jsp:include>
         <h1>Nuevo Alumno</h1>
         <c:url var="creaUrl" value="/alumno/crea" />
         <form:form commandName="alumno" action="${creaUrl}" method="post">
@@ -27,39 +30,45 @@
             </form:errors>
             
             <fieldset>
-                <div>
-                    <label for="matricula">Matrícula</label><br/>
-                    <form:input path="matricula" required="true" />
-                    <form:errors path="matricula" />
+                <div class="row">
+                    <div class="span4 control-group">
+                        <label for="matricula">Matrícula</label>
+                        <form:input path="matricula" required="true" />
+                        <form:errors path="matricula" />
+                    </div>
+                    <div class="span4 control-group">
+                        <label for="nombre">Nombre</label>
+                        <form:input path="nombre" />
+                        <form:errors path="nombre" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span4 control-group">
+                        <label for="apellido">Apellido</label>
+                        <form:input path="apellido" />
+                        <form:errors path="apellido" />
+                    </div>
+                    <div class="span4 control-group">
+                        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                        <form:input path="fechaNacimiento" />
+                        <form:errors path="fechaNacimiento" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span4 control-group">
+                        <label for="esHombre">¿Es hombre?</label>
+                        <form:checkbox path="esHombre" />
+                        <form:errors path="esHombre" />
+                    </div>
+                    <div class="span4 control-group">
+                        <label for="correo">Correo</label>
+                        <form:input path="correo" />
+                        <form:errors path="correo" />
+                    </div>
                 </div>
                 <div>
-                    <label for="nombre">Nombre</label><br/>
-                    <form:input path="nombre" />
-                    <form:errors path="nombre" />
-                </div>
-                <div>
-                    <label for="apellido">Apellido</label><br/>
-                    <form:input path="apellido" />
-                    <form:errors path="apellido" />
-                </div>
-                <div>
-                    <label for="fechaNacimiento">Fecha de Nacimiento</label><br/>
-                    <form:input path="fechaNacimiento" />
-                    <form:errors path="fechaNacimiento" />
-                </div>
-                <div>
-                    <label for="esHombre">¿Es hombre?</label><br/>
-                    <form:checkbox path="esHombre" />
-                    <form:errors path="esHombre" />
-                </div>
-                <div>
-                    <label for="correo">Correo</label><br/>
-                    <form:input path="correo" />
-                    <form:errors path="correo" />
-                </div>
-                <div>
-                    <input type="submit" value="Crear Alumno" />
-                    <a href="<c:url value='/alumno'/>">Cancelar</a>
+                    <btn type="submit" class="btn btn-primary btn-large"><i class="icon-user"></i> Crea Usuario</btn>
+                    <a href="<c:url value='/alumno'/>" class="btn btn-large"><i class="icon-remove-circle"></i> Cancelar</a>
                 </div>
             </fieldset>
         </form:form>
